@@ -1,7 +1,8 @@
+#include "Matrix.h"
 #include <vector>
 #include <math.h>
 
-class Tensor
+class Tensor : public Matrix
 {
-    
+
 };

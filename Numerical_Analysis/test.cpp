@@ -3,10 +3,24 @@
 
 int main()
 {
-    Matrix A(3,4);
     
+    vector<vector<int>> A(4);
+    vector<vector<int>> B(4);
 
-    cout << A.col  << " " << A.row << endl;
+    for (int i = 0; i < 4; i++)
+    {
+        A[i].assign(4,3);
+        B[i].assign(4,4);
+    }
+
+    Matrix A1(A);
+    Matrix B1(B);
+
+    Matrix C(4,4);
+
+    C = A1 * B1;
+
+    C.show();
 
     return 0;
 

@@ -9,13 +9,16 @@ public:
     int row, col;
     vector<vector<int>> MAT;
 
+    Matrix();
     Matrix(int R, int C);
+    Matrix(vector<vector<int>> MAT_);
 
     Matrix operator + (Matrix& op1);
     Matrix operator - (Matrix& op1);
     Matrix operator * (Matrix& op1);
     Matrix operator * (int Constant);
 
+    void show();
 
 };
 
@@ -30,6 +33,17 @@ Matrix::Matrix(int R, int C)
         this->MAT[i].assign(C,0);
     }
 
+}
+
+Matrix::Matrix(vector<vector<int>> MAT_)
+{
+    if (MAT_.size() == 0)
+    {
+        MAT_.resize(1);
+    }
+    this->MAT = MAT_;
+    this->row = this->MAT.size();
+    this->col = this->MAT[0].size();
 }
 
 Matrix Matrix::operator+ (Matrix& op1)
@@ -100,7 +114,7 @@ Matrix Matrix::operator* (Matrix& op1)
 
 Matrix Matrix::operator * (int Constant)
 {
-    
+
     Matrix RES(this->row, this->col);
 
     for (int i = 0; i < this->row; i++)
@@ -112,4 +126,16 @@ Matrix Matrix::operator * (int Constant)
     }
     
     return RES;
+}
+
+void Matrix::show()
+{
+    for (int i = 0; i < this->row; i++)
+    {
+        for (int j = 0; j < this->col; j++)
+        {
+            cout << this->MAT[i][j] << "  ";
+        }
+        cout << endl;
+    }
 }
