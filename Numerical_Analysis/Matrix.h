@@ -160,3 +160,13 @@ void Matrix::show()
         cout << endl;
     }
 }
+
+Matrix Matrix::Inverse_Matrix()
+{
+
+}
+
+double Matrix::Determinant()
+{
+    
+}
