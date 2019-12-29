@@ -9,7 +9,6 @@ public:
     int row, col;
     vector<vector<int>> MAT;
 
-    Matrix();
     Matrix(int R, int C);
     Matrix(vector<vector<int>> MAT_);
 
@@ -17,7 +16,9 @@ public:
     Matrix operator-(Matrix &op1);
     Matrix operator*(Matrix &op1);
     Matrix operator*(int Constant);
-    
+
+    Matrix Inverse_Matrix();
+    double Determinant();
     void show();
 };
 
