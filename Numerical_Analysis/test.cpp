@@ -22,6 +22,8 @@ int main()
 
     C.show();
 
+    cout << "OK" << endl;
+
     return 0;
 
 }
