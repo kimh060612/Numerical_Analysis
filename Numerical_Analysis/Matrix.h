@@ -39,11 +39,15 @@ Matrix::Matrix(vector<vector<int>> MAT_)
 {
     if (MAT_.size() == 0)
     {
-        MAT_.resize(1);
+        this->MAT = MAT_;
     }
-    this->MAT = MAT_;
-    this->row = this->MAT.size();
-    this->col = this->MAT[0].size();
+    else
+    {
+        this->MAT = MAT_;
+        this->row = this->MAT.size();
+        this->col = this->MAT[0].size();
+    }
+    
 }
 
 Matrix Matrix::operator+(Matrix &op1)
@@ -208,3 +212,4 @@ void Matrix::Identity()
     }
     
 }
+
