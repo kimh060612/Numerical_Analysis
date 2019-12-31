@@ -8,7 +8,7 @@ class Matrix
 {
 public:
     int row, col;
-    vector<vector<int>> MAT;
+    vector<vector<int>> MAT; // type change needed! template type.
 
     Matrix(int R, int C);
     Matrix(vector<vector<int>> MAT_);
@@ -167,12 +167,35 @@ void Matrix::show()
     }
 }
 
-Matrix Matrix::Inverse_Matrix()
+Matrix Matrix::Inverse_Matrix() // After the MAT type changed.
 {
+    try
+    {
+        if (this->col != this->row)
+        {
+            int e = 1;
+            throw e;
+        }
+        else
+        {
+            int n = this->col;
+            Matrix Iden(n, n);
+            Iden.Identity();
+
+
+
+        }
+        
+    }
+    catch(const int e)
+    {
+        cout << "Cannot get the inverse matrix" << endl;
+    }
+    
 
 }
 
-double Matrix::Determinant()
+double Matrix::Determinant() // Same with Inverse_Matrix.
 {
         
 }
