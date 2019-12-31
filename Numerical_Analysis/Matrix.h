@@ -19,6 +19,7 @@ public:
 
     Matrix Inverse_Matrix();
     double Determinant();
+    void Identity();
     void show();
 };
 
@@ -168,5 +169,42 @@ Matrix Matrix::Inverse_Matrix()
 
 double Matrix::Determinant()
 {
+    
+}
+
+void Matrix::Identity()
+{
+    try
+    {
+        if (this->col != this->row)
+        {
+            int e = 1;
+            throw e;
+        }
+        else
+        {
+            int n = this->row;
+            for (int i = 0; i < n;i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (i == j)
+                    {
+                        this->MAT[i][j] = 1;
+                    }
+                    else
+                    {
+                        this ->MAT[i][j] = 0;
+                    }
+                    
+                }
+            }
+        }
+        
+    }
+    catch(int e)
+    {
+        cout << "Cannot make Identity" << endl;
+    }
     
 }
