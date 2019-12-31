@@ -1,5 +1,6 @@
 #include <math.h>
 #include <vector>
+#define det(a, b) (a+b)%2 == 0 ? 1 : -1
 
 using namespace std;
 
@@ -173,7 +174,7 @@ Matrix Matrix::Inverse_Matrix()
 
 double Matrix::Determinant()
 {
-    
+        
 }
 
 void Matrix::Identity()
