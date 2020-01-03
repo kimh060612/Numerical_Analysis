@@ -4,8 +4,17 @@
 
 using namespace std;
 
-int Decoding_DP[INF][INF];
+struct Theta
+{
+    Matrix STP;
+    Matrix OP;
+    Matrix ISP;
+};
+
+vector<int> Create_Observation();
 int Evaluate(Matrix STP, Matrix OP);
+vector<int> Viterbi(Matrix STP, Matrix OP, Matrix ISP);
+Theta Learning_HMM(Matrix OP);
 
 int main()
 {
@@ -15,7 +24,7 @@ int main()
 
 int Evaluate(Matrix STP, Matrix OP, vector<int> ISP)
 {
-    
+
     int EVAL_DP[INF][INF] = {0,};
     int sum = 0;
 
@@ -42,4 +51,15 @@ int Evaluate(Matrix STP, Matrix OP, vector<int> ISP)
 
     return sum;
 
+}
+
+vector<int> Viterbi(Matrix STP, Matrix OP, Matrix ISP)
+{
+    int Decoding_DP[INF][INF];
+
+}
+
+Theta Learning_HMM(Matrix OP)
+{
+    
 }
