@@ -20,7 +20,6 @@ public:
     Matrix operator*(int Constant);
 
     Matrix Inverse_Matrix();
-    double Determinant();
     void Identity();
     void show();
 };
@@ -196,11 +195,6 @@ Matrix Matrix::Inverse_Matrix() // After the MAT type changed.
 
 }
 
-double Matrix::Determinant() // Same with Inverse_Matrix.
-{
-        
-}
-
 void Matrix::Identity()
 {
     try
@@ -238,3 +232,7 @@ void Matrix::Identity()
     
 }
 
+double Determinant(Matrix Target, int size) // Same with Inverse_Matrix.
+{
+        
+}
