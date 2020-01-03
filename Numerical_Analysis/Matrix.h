@@ -1,3 +1,4 @@
+#include <iostream>
 #include <math.h>
 #include <vector>
 #define det(a, b) (a+b)%2 == 0 ? 1 : -1
