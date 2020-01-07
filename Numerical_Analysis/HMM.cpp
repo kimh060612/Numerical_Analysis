@@ -56,7 +56,7 @@ int Evaluate(Matrix STP, Matrix OP, vector<int> ISP)
 vector<int> Viterbi(Matrix STP, Matrix OP, Matrix ISP)
 {
     int Decoding_DP[INF][INF];
-
+    
 }
 
 Theta Learning_HMM(Matrix OP)
