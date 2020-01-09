@@ -2,6 +2,7 @@
 #include <math.h>
 #include <vector>
 #define det(a, b) (a+b)%2 == 0 ? 1 : -1
+#define INF 987654321
 
 using namespace std;
 
@@ -19,7 +20,6 @@ public:
     Matrix operator*(Matrix &op1);
     Matrix operator*(int Constant);
 
-    Matrix Inverse_Matrix();
     void Identity();
     void show();
 };
@@ -167,34 +167,6 @@ void Matrix::show()
     }
 }
 
-Matrix Matrix::Inverse_Matrix() // After the MAT type changed.
-{
-    try
-    {
-        if (this->col != this->row)
-        {
-            int e = 1;
-            throw e;
-        }
-        else
-        {
-            int n = this->col;
-            Matrix Iden(n, n);
-            Iden.Identity();
-
-
-
-        }
-        
-    }
-    catch(const int e)
-    {
-        cout << "Cannot get the inverse matrix" << endl;
-    }
-    
-
-}
-
 void Matrix::Identity()
 {
     try
@@ -232,7 +204,51 @@ void Matrix::Identity()
     
 }
 
-double Determinant(Matrix Target, int size) // Same with Inverse_Matrix.
+double Determinant(Matrix Target) // Same with Inverse_Matrix.
 {
-        
+	try
+	{
+		int n;
+		double Det = 0;
+		if (Target.row != Target.col){ int e = 1; throw(e); }
+		n = Target.col;
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				Det += (det(i, j))*(Cofactor(Target, i, j))*Target.MAT[i][j];
+			}
+		}
+		return Det;
+	}
+	catch(int e)
+	{
+		cout << "Cannot get the Determinant" << endl;
+	}
 }
+
+Matrix Inverse(Matrix target)
+{
+
+}
+
+double Cofactor(Matrix target, int p, int q)
+{
+	try
+	{
+		int n;
+		vector<vector<int>> RES;
+		if (target.row != target.col){ int e = 1; throw(e); }
+		else
+		{
+
+		}
+	}
+	catch(int e)
+	{
+
+	}
+}
+
+
+
