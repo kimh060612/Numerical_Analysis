@@ -271,7 +271,7 @@ Matrix Inverse(Matrix target)
 			{
 				for (int j = 0; j < n; j++)
 				{
-					RES.MAT[i][j] = CoFactor(target, i, j);
+					RES.MAT[j][i] = CoFactor(target, i, j);
 				}
 			}
 			return RES;
