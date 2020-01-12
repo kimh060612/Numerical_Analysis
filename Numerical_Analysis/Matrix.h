@@ -10,16 +10,18 @@ class Matrix
 {
 public:
     int row, col;
-    vector<vector<int>> MAT; // type change needed! template type.
+    vector<vector<double>> MAT;
 
     Matrix(int R, int C);
-    Matrix(vector<vector<int>> MAT_);
+    Matrix(vector<vector<double>> MAT_);
 
     Matrix operator+(Matrix &op1);
     Matrix operator-(Matrix &op1);
     Matrix operator*(Matrix &op1);
     Matrix operator*(int Constant);
 
+	double EigenValue();
+	Matrix EigenVector();
     void Identity();
     void show();
 };
@@ -36,7 +38,7 @@ Matrix::Matrix(int R, int C)
     }
 }
 
-Matrix::Matrix(vector<vector<int>> MAT_)
+Matrix::Matrix(vector<vector<double>> MAT_)
 {
     if (MAT_.size() == 0)
     {
@@ -167,6 +169,16 @@ void Matrix::show()
     }
 }
 
+double Matrix::EigenValue()
+{
+	return 0.0;
+}
+
+Matrix Matrix::EigenVector()
+{
+	
+}
+
 void Matrix::Identity()
 {
     try
@@ -212,43 +224,94 @@ double Determinant(Matrix Target) // Same with Inverse_Matrix.
 		double Det = 0;
 		if (Target.row != Target.col){ int e = 1; throw(e); }
 		n = Target.col;
-		for (int i = 0; i < n; i++)
+		Matrix SUBMAT(n - 1, n - 1);
+		if (n == 2) return (Target.MAT[0][0]*Target.MAT[1][1] - Target.MAT[0][1]*Target.MAT[1][0]);
+		else
 		{
-			for (int j = 0; j < n; j++)
+			for (int c = 0; c < n; c++)
 			{
-				Det += (det(i, j))*(Cofactor(Target, i, j))*Target.MAT[i][j];
+				int subi = 0;
+				for (int i = 1; i < n; i++)
+				{
+					int subj = 0;
+					for (int j = 0; j < n; j++)
+					{
+						if (j == c)continue;
+						SUBMAT.MAT[subi][subj] = Target.MAT[i][j];
+						subj++;
+					}
+					subi++;
+				}
+				Det = Det + (pow(-1, c) * Target.MAT[0][c] * Determinant(SUBMAT));
 			}
 		}
 		return Det;
 	}
 	catch(int e)
 	{
-		cout << "Cannot get the Determinant" << endl;
+		cout << "Cannot get the Determinant. this is not the squre matrix" << endl;
 	}
 }
 
 Matrix Inverse(Matrix target)
 {
-
-}
-
-double Cofactor(Matrix target, int p, int q)
-{
-	try
+	try 
 	{
-		int n;
-		vector<vector<int>> RES;
-		if (target.row != target.col){ int e = 1; throw(e); }
+		double DET = Determinant(target);
+		if (target.col != target.row || DET == double(0))
+		{
+			int e = 1;
+			throw (e);
+		}
 		else
 		{
-
+			int n = target.col;
+			Matrix RES(n, n);
+			for (int i = 0; i < n; i++)
+			{
+				for (int j = 0; j < n; j++)
+				{
+					RES.MAT[i][j] = CoFactor(target, i, j);
+				}
+			}
+			return RES;
 		}
 	}
 	catch(int e)
 	{
-
+		cout << "Cannot get the Inverse Matrix." << endl;
 	}
 }
 
-
+double CoFactor(Matrix Target, int p, int q)
+{
+	try
+	{
+		int n;
+		if (Target.col != Target.row) { int e = 1; throw(e); }
+		n = Target.col;
+		Matrix SUB(n - 1, n - 1);
+		for (int i = 0; i < n; i++)
+		{
+			int suba = 0;
+			if (i == p)continue;
+			for (int j = 0; j < n; j++)
+			{
+				int subb = 0;
+				if (j == q)continue;
+				else
+				{
+					SUB.MAT[suba][subb] = Target.MAT[i][j];
+					subb++;
+				}
+			}
+			suba++;
+		}
+		return det(p , q)*Determinant(SUB);
+	}
+	catch (int e)
+	{
+		cout << "Cannot get the cofactor. this is not the squre matrix" << endl;
+	}
+}
 
