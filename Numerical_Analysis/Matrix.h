@@ -169,15 +169,6 @@ void Matrix::show()
     }
 }
 
-double Matrix::EigenValue()
-{
-	return 0.0;
-}
-
-Matrix Matrix::EigenVector()
-{
-	
-}
 
 void Matrix::Identity()
 {
