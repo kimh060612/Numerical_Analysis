@@ -303,6 +303,7 @@ double CoFactor(Matrix Target, int p, int q)
 	catch (int e)
 	{
 		cout << "Cannot get the cofactor. this is not the squre matrix" << endl;
+
 	}
 }
 
