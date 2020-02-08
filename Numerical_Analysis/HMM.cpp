@@ -16,7 +16,7 @@ struct Theta
 vector<int> Create_Observation(Theta T);
 double Evaluate(Matrix STP, Matrix OP, vector<double> ISP);
 int * Viterbi(Matrix STP, Matrix OP,vector<double> ISP);
-Theta Learning_HMM(vector<double> Observation, int num_state, int learning_epoch);
+Theta Learning_HMM(vector<double> Observation, int num_state, int learning_epoch, int Threshold);
 Theta Initialize_Theta(int T, int N);
 double * Random_Probability_Vector_Generator(int n);
 double(*Calc_Alpha(Theta Model))[INF];
