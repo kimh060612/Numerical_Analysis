@@ -19,10 +19,10 @@ int * Viterbi(Matrix STP, Matrix OP,vector<double> ISP, vector<double> Observati
 Theta Learning_HMM(vector<double> Observation, int num_state, int learning_epoch, int Threshold);
 Theta Initialize_Theta(int T, int N);
 double * Random_Probability_Vector_Generator(int n);
-double (*Calc_Alpha(Theta Model))[INF];
-double (*Calc_Beta(Theta Model))[INF];
+double(*Calc_Alpha(Theta Model, int T, int N, vector<double> Observation))[INF];
+double(*Calc_Beta(Theta Model, int T, int N, vector<double> Observation))[INF];
 double element_product_Sum(double *A, double *B, int N);
-double Over_Kappa(double(*A)[INF], double(*B)[INF], int t, int N, Theta Model);
+double Over_Kappa(double(*A)[INF], double(*B)[INF], int t, int N, Theta Model, vector<double> Observation);
 
 int main()
 {
@@ -290,8 +290,8 @@ Theta Learning_HMM(vector<double> Observation, int num_state, int learning_epoch
 			{
 				for (int j = 0; j < N; j++)
 				{
-					double OverSum = Over_Kappa(Alpha, Beta, t, N, Model);
-					Kappa[t][i][j] = (Alpha[t][i] * Model.STP.MAT[i][j] * Model.OP.MAT[j][t + 1] * Beta[t + 1][j]) / OverSum;
+					double OverSum = Over_Kappa(Alpha, Beta, t, N, Model, Observation);
+					Kappa[t][i][j] = (Alpha[t][i] * Model.STP.MAT[i][j] * Model.OP.MAT[j][Observation[t + 1]] * Beta[t + 1][j]) / OverSum;
 				}
 			}
 		}
