@@ -8,7 +8,7 @@ struct Theta
 {
     Matrix STP;
     Matrix OP;
-    Matrix ISP;
+	vector<double> ISP;
 };
 
 vector<int> Create_Observation();
@@ -22,7 +22,7 @@ int main()
     return 0;
 }
 
-int Evaluate(Matrix STP, Matrix OP, vector<int> ISP)
+int Evaluate(Matrix STP, Matrix OP, vector<double> ISP)
 {
 
     int EVAL_DP[INF][INF] = {0,};
@@ -53,10 +53,45 @@ int Evaluate(Matrix STP, Matrix OP, vector<int> ISP)
 
 }
 
-vector<int> Viterbi(Matrix STP, Matrix OP, Matrix ISP)
+int * Viterbi(Matrix STP, Matrix OP, vector<double> ISP)
 {
     int Decoding_DP[INF][INF];
-    
+	int Decoding_index[INF][INF];
+
+	int T = OP.col, N = OP.row;
+
+	for (int i = 1; i <= N; i++)
+	{
+		Decoding_DP[1][i] = (ISP[i]) * (OP.MAT[i][1]);
+	}
+
+	for (int t = 2; t <= T; t++)
+	{
+		for (int i = 1; i <= N; i++)
+		{
+			int max = -987654321, k;
+			for (int j = 1; i <= N; i++)
+			{
+				int Val = Decoding_DP[t - 1][j] * STP.MAT[j][i];
+				if (Val > max)k = j;
+			}
+
+			Decoding_DP[t][i] = Decoding_DP[t - 1][k] * STP.MAT[k][i] * OP.MAT[i][t];
+			Decoding_index[t][i] = k;
+		}
+	}
+
+	int Q_hat[INF];
+
+	Q_hat[T] = argmax_1d(Decoding_DP[T], 1, N);
+
+	for (int t = T - 1; t >= 1; t--)
+	{
+		Q_hat[t] = Decoding_DP[t + 1][Q_hat[t + 1]];
+	}
+
+	return Q_hat;
+
 }
 
 Theta Learning_HMM(Matrix OP)

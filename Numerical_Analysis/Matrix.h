@@ -303,8 +303,20 @@ double CoFactor(Matrix Target, int p, int q)
 	catch (int e)
 	{
 		cout << "Cannot get the cofactor. this is not the squre matrix" << endl;
-                // There are no cofactors
-
 	}
 }
 
+int argmax_1d(int *A, int s, int e)
+{
+	int max = -987654321;
+	for (int i = s; i <= e; i++)
+	{
+		if (max < A[i])max = A[i];
+	}
+	return max;
+}
+
+int argmax_2d(int **A, int s, int e)
+{
+
+}
