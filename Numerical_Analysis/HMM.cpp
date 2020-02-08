@@ -14,13 +14,13 @@ struct Theta
 };
 
 vector<int> Create_Observation(Theta T);
-double Evaluate(Matrix STP, Matrix OP, vector<double> ISP);
-int * Viterbi(Matrix STP, Matrix OP,vector<double> ISP);
+double Evaluate(Matrix STP, Matrix OP, vector<double> ISP, vector<double> Observation);
+int * Viterbi(Matrix STP, Matrix OP,vector<double> ISP, vector<double> Observation);
 Theta Learning_HMM(vector<double> Observation, int num_state, int learning_epoch, int Threshold);
 Theta Initialize_Theta(int T, int N);
 double * Random_Probability_Vector_Generator(int n);
-double(*Calc_Alpha(Theta Model))[INF];
-double(*Calc_Beta(Theta Model))[INF];
+double (*Calc_Alpha(Theta Model))[INF];
+double (*Calc_Beta(Theta Model))[INF];
 double element_product_Sum(double *A, double *B, int N);
 double Over_Kappa(double(*A)[INF], double(*B)[INF], int t, int N, Theta Model);
 
@@ -30,16 +30,16 @@ int main()
     return 0;
 }
 
-double Evaluate(Matrix STP, Matrix OP, vector<double> ISP)
+double Evaluate(Matrix STP, Matrix OP, vector<double> ISP, vector<double> Observation)
 {
 
     double EVAL_DP[INF][INF] = {0,};
     double sum = 0;
 
-    int T = OP.col, N = OP.row;
+    int T = Observation.size(), N = OP.row;
     for (int i = 0; i < N;i++)
     {
-        EVAL_DP[0][i] = ISP[i]*OP.MAT[i][0];
+        EVAL_DP[0][i] = ISP[i]*OP.MAT[i][Observation[0]];
     }
 
     for (int t = 1; t < T; t++)
@@ -51,7 +51,7 @@ double Evaluate(Matrix STP, Matrix OP, vector<double> ISP)
             {
                 tmp += EVAL_DP[t-1][j]*STP.MAT[j][i];
             }
-            EVAL_DP[t][i] = tmp*OP.MAT[i][t];
+            EVAL_DP[t][i] = tmp*OP.MAT[i][Observation[t]];
         }
     }
 
@@ -61,16 +61,16 @@ double Evaluate(Matrix STP, Matrix OP, vector<double> ISP)
 
 }
 
-int *Viterbi(Matrix STP, Matrix OP, vector<double> ISP)
+int *Viterbi(Matrix STP, Matrix OP, vector<double> ISP, vector<double> Observation)
 {
 	double Decoding_DP[INF][INF];
 	double Decoding_index[INF][INF];
 
-	int T = OP.col, N = OP.row;
+	int T = Observation.size(), N = OP.row;
 
 	for (int i = 0; i < N; i++)
 	{
-		Decoding_DP[0][i] = (ISP[i]) * (OP.MAT[i][0]);
+		Decoding_DP[0][i] = (ISP[i]) * (OP.MAT[i][Observation[0]]);
 	}
 
 	for (int t = 1; t < T; t++)
@@ -84,7 +84,7 @@ int *Viterbi(Matrix STP, Matrix OP, vector<double> ISP)
 				if (Val > max)k = j;
 			}
 
-			Decoding_DP[t][i] = Decoding_DP[t - 1][k] * STP.MAT[k][i] * OP.MAT[i][t];
+			Decoding_DP[t][i] = Decoding_DP[t - 1][k] * STP.MAT[k][i] * OP.MAT[i][Observation[t]];
 			Decoding_index[t][i] = k;
 		}
 	}
@@ -170,16 +170,13 @@ vector<int> Create_Observation(Theta T)
 	return vector<int>();
 }
 
-double (* Calc_Alpha(Theta Model))[INF]
+double (* Calc_Alpha(Theta Model, int T, int N, vector<double> Observation))[INF]
 {
 	double Alpha[INF][INF];
-	
-	int T = Model.OP.col;
-	int N = Model.OP.row;
 
 	for (int i = 0; i < N; i++)
 	{
-		Alpha[0][i] = Model.ISP[i] * Model.OP.MAT[i][0];
+		Alpha[0][i] = Model.ISP[i] * Model.OP.MAT[i][Observation[0]];
 	}
 
 	for (int t = 1; t < T; t++)
@@ -191,7 +188,7 @@ double (* Calc_Alpha(Theta Model))[INF]
 			{
 				tmp += Alpha[t - 1][j] * Model.STP.MAT[j][i];
 			}
-			Alpha[t][i] = tmp * Model.OP.MAT[i][t];
+			Alpha[t][i] = tmp * Model.OP.MAT[i][Observation[t]];
 		}
 	}
 
@@ -199,13 +196,10 @@ double (* Calc_Alpha(Theta Model))[INF]
 
 }
 
-double(* Calc_Beta(Theta Model))[INF]
+double(* Calc_Beta(Theta Model, int T, int N, vector<double> Observation))[INF]
 {
 
 	double Beta[INF][INF];
-
-	int T = Model.OP.col;
-	int N = Model.OP.row;
 
 	for (int i = 0; i < N; i++)
 	{
@@ -219,7 +213,7 @@ double(* Calc_Beta(Theta Model))[INF]
 			int sum = 0;
 			for (int j = 0; j < N; j++)
 			{
-				sum += Model.STP.MAT[j][i] * Model.OP.MAT[j][t] * Beta[t + 1][j];
+				sum += Model.STP.MAT[j][i] * Model.OP.MAT[j][Observation[t]] * Beta[t + 1][j];
 			}
 			Beta[t][i] = sum;
 		}
@@ -241,7 +235,7 @@ double element_product_Sum(double *A, double *B, int N)
 	return sum;
 }
 
-double Over_Kappa(double (*A)[INF],double (*B)[INF], int t,int N, Theta Model)
+double Over_Kappa(double (*A)[INF],double (*B)[INF], int t,int N, Theta Model, vector<double> Observation)
 {
 	double Total_Sum = 0;
 
@@ -250,7 +244,7 @@ double Over_Kappa(double (*A)[INF],double (*B)[INF], int t,int N, Theta Model)
 		double sum = 0;
 		for (int q = 0; q < N; q++)
 		{
-			sum += A[t][p] * Model.STP.MAT[p][q] * Model.OP.MAT[q][t + 1] * B[t + 1][q];
+			sum += A[t][p] * Model.STP.MAT[p][q] * Model.OP.MAT[q][Observation[t + 1]] * B[t + 1][q];
 		}
 		Total_Sum += sum;
 	}
@@ -278,8 +272,8 @@ Theta Learning_HMM(vector<double> Observation, int num_state, int learning_epoch
 	for (int epoch = 1; epoch <= learning_epoch; epoch++)
 	{
 		// Step E
-		Alpha = Calc_Alpha(Model);
-		Beta = Calc_Beta(Model);
+		Alpha = Calc_Alpha(Model, T, N, Observation);
+		Beta = Calc_Beta(Model, T ,N, Observation);
 
 		for (int t = 0; t < T; t++)
 		{
@@ -337,7 +331,7 @@ Theta Learning_HMM(vector<double> Observation, int num_state, int learning_epoch
 			Model.ISP[i] = Gamma[1][i];
 		}
 
-		Probability_O_Theta[epoch] = Evaluate(Model.STP, Model.OP, Model.ISP);
+		Probability_O_Theta[epoch] = Evaluate(Model.STP, Model.OP, Model.ISP, Observation);
 		double Difference = Probability_O_Theta[epoch] - Probability_O_Theta[epoch - 1];
 		if (Difference < Threshold)break;
 

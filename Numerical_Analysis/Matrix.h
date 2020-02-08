@@ -249,6 +249,38 @@ double Determinant(Matrix Target) // Same with Inverse_Matrix.
 	}
 }
 
+double CoFactor(Matrix Target, int p, int q)
+{
+	try
+	{
+		int n;
+		if (Target.col != Target.row) { int e = 1; throw(e); }
+		n = Target.col;
+		Matrix SUB(n - 1, n - 1);
+		for (int i = 0; i < n; i++)
+		{
+			int suba = 0;
+			if (i == p)continue;
+			for (int j = 0; j < n; j++)
+			{
+				int subb = 0;
+				if (j == q)continue;
+				else
+				{
+					SUB.MAT[suba][subb] = Target.MAT[i][j];
+					subb++;
+				}
+			}
+			suba++;
+		}
+		return det(p, q)*Determinant(SUB);
+	}
+	catch (int e)
+	{
+		cout << "Cannot get the cofactor. this is not the squre matrix" << endl;
+	}
+}
+
 Matrix Inverse(Matrix target)
 {
 	try 
@@ -279,37 +311,7 @@ Matrix Inverse(Matrix target)
 	}
 }
 
-double CoFactor(Matrix Target, int p, int q)
-{
-	try
-	{
-		int n;
-		if (Target.col != Target.row) { int e = 1; throw(e); }
-		n = Target.col;
-		Matrix SUB(n - 1, n - 1);
-		for (int i = 0; i < n; i++)
-		{
-			int suba = 0;
-			if (i == p)continue;
-			for (int j = 0; j < n; j++)
-			{
-				int subb = 0;
-				if (j == q)continue;
-				else
-				{
-					SUB.MAT[suba][subb] = Target.MAT[i][j];
-					subb++;
-				}
-			}
-			suba++;
-		}
-		return det(p , q)*Determinant(SUB);
-	}
-	catch (int e)
-	{
-		cout << "Cannot get the cofactor. this is not the squre matrix" << endl;
-	}
-}
+
 
 double argmax_1d(double *A, int s, int e)
 {
@@ -319,9 +321,4 @@ double argmax_1d(double *A, int s, int e)
 		if (max < A[i])max = A[i];
 	}
 	return max;
-}
-
-int argmax_2d(int **A, int s, int e)
-{
-
 }
