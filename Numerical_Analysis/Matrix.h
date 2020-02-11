@@ -1,6 +1,6 @@
 #include <iostream>
 #include <math.h>
-#include <vector>
+#include <memory.h>
 #define det(a, b) (a+b)%2 == 0 ? 1 : -1
 #define INF 987654321
 
@@ -10,11 +10,13 @@ class Matrix
 {
 public:
     int row, col;
-    vector<vector<double>> MAT;
+    double **MAT;
 
 	Matrix();
     Matrix(int R, int C);
-    Matrix(vector<vector<double>> MAT_);
+    Matrix(double **MAT_);
+
+	~Matrix();
 
     Matrix operator+(Matrix &op1);
     Matrix operator-(Matrix &op1);
@@ -36,26 +38,35 @@ Matrix::Matrix(int R, int C)
     this->row = R;
     this->col = C;
 
-    this->MAT.resize(R);
+    this->MAT = new double* [R];
     for (int i = 0; i < R; i++)
     {
-        this->MAT[i].assign(C, 0);
+        this->MAT[i] = new double [C];
     }
 }
 
-Matrix::Matrix(vector<vector<double>> MAT_)
+Matrix::Matrix(double **MAT_)
 {
-    if (MAT_.size() == 0)
+    if (sizeof(MAT_)/sizeof(double) == 0)
     {
         this->MAT = MAT_;
     }
     else
     {
         this->MAT = MAT_;
-        this->row = this->MAT.size();
-        this->col = this->MAT[0].size();
+        this->row = sizeof(this->MAT)/sizeof(this->MAT[0]);
+        this->col = sizeof(this->MAT[0])/sizeof(double);
     }
     
+}
+
+inline Matrix::~Matrix()
+{
+	for (int i = 0; i < this->row; i++)
+	{
+		delete [] this->MAT[i];
+	}
+	delete [] this->MAT;
 }
 
 Matrix Matrix::operator+(Matrix &op1)
@@ -160,6 +171,16 @@ Matrix Matrix::operator*(int Constant)
     }
 
     return RES;
+}
+
+inline double Matrix::EigenValue()
+{
+	return 0.0;
+}
+
+inline Matrix Matrix::EigenVector()
+{
+	return Matrix();
 }
 
 void Matrix::show()
