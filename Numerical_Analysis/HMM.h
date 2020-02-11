@@ -167,6 +167,8 @@ Theta Initialize_Theta(int T, int N)
 int *Create_Observation(Theta T)
 {
 	int *A;
+	int b = 5;
+	A = &b;
 	return A;
 }
 
@@ -253,7 +255,7 @@ double Over_Kappa(Matrix A, Matrix B, int t, int N, Theta Model, int *Observatio
 	return Total_Sum;
 }
 
-Theta Learning_HMM(int *Observation, int N, int learning_epoch, int Threshold) //
+Theta Learning_HMM(int *Observation, int N, int learning_epoch, int Threshold) // N: number of state
 {
 	int T = sizeof(Observation)/sizeof(int); // time seq.
 	Theta T_initial;

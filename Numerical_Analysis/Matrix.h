@@ -15,14 +15,21 @@ public:
 	Matrix();
     Matrix(int R, int C);
     Matrix(double **MAT_);
-
 	~Matrix();
+
+	// 锐家 青纺 贸府 何盒
+
 
     Matrix operator+(Matrix &op1);
     Matrix operator-(Matrix &op1);
     Matrix operator*(Matrix &op1);
     Matrix operator*(int Constant);
+	Matrix operator^(int N);
+	Matrix operator->*(Matrix &op1);
 
+	Matrix Trans();
+	double *PTR_ROW(int index);
+	double *PTR_COL(int index);
 	double EigenValue();
 	Matrix EigenVector();
     void Identity();
@@ -127,7 +134,6 @@ Matrix Matrix::operator-(Matrix &op1)
 
 Matrix Matrix::operator*(Matrix &op1)
 {
-
     try
     {
         if (this->col != op1.row)
@@ -171,6 +177,101 @@ Matrix Matrix::operator*(int Constant)
     }
 
     return RES;
+}
+
+inline Matrix Matrix::operator^(int N)
+{
+	if (this->row != this->col)
+	{
+		cout << "Error: Shape Fault!" << endl;
+	}
+	else
+	{
+		Matrix RES(this->row, this->row);
+
+		RES = *this;
+
+		for (int i = 1; i <= N; i++)
+		{
+			RES = RES * (*this);
+		}
+
+		return RES;
+	}
+	return Matrix();
+}
+
+inline Matrix Matrix::operator->*(Matrix & op1)
+{
+	if (this->row != op1.row || this->col != op1.col)
+	{
+		cout << "Error: Shape Fault!" << endl;
+	}
+	else
+	{
+		Matrix res(this->row, this->col);
+
+		for (int i = 0; i < this->row; i++)
+		{
+			for (int j = 0; j < this->col; j++)
+			{
+				res.MAT[i][j] = this->MAT[i][j] * op1.MAT[i][j];
+			}
+		}
+		return res;
+	}
+	return Matrix();
+}
+
+inline Matrix Matrix::Trans()
+{
+	Matrix res(this->col, this->row);
+
+	for (int i = 0; i < this->col; i++)
+	{
+		for (int j = 0; j < this->row; j++)
+		{
+			res.MAT[i][j] = this->MAT[j][i];
+		}
+	}
+
+	return res;
+}
+
+inline double * Matrix::PTR_ROW(int index)
+{
+	if (index <0 || index > this->row)
+	{
+		cout << "index is not in the range" << endl;
+		return NULL;
+	}
+	else
+	{
+		double *A = new double[this->row];
+		for (int i = 0; i < this->col; i++)
+		{
+			A[i] = this->MAT[index][i];
+		}
+		return A;
+	}
+}
+
+inline double * Matrix::PTR_COL(int index)
+{
+	if (index <0 || index > this->col)
+	{
+		cout << "index is not in the range" << endl;
+		return NULL;
+	}
+	else
+	{
+		double *A = new double[this->row];
+		for (int i = 0; i < this->row; i++)
+		{
+			A[i] = this->MAT[i][index];
+		}
+		return A;
+	}
 }
 
 inline double Matrix::EigenValue()
