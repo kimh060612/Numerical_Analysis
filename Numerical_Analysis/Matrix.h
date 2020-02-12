@@ -1,5 +1,5 @@
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <memory.h>
 #define det(a, b) (a+b)%2 == 0 ? 1 : -1
 #define INF 987654321
@@ -433,14 +433,12 @@ Matrix Inverse(Matrix target)
 	}
 }
 
-
-
 double argmax_1d(double *A, int s, int e)
 {
 	double max = -987654321;
 	for (int i = s; i <= e; i++)
 	{
-		if (max < A[i])max = A[i];
+		if (max < A[i])max = i;
 	}
 	return max;
 }

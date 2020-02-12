@@ -9,6 +9,8 @@ Tensor::Tensor(int W, int H)
 	this->H = H; this->W = W;
 	this->Dim = 2;
 	this->Depth_1 = 1;
+	this->size = new int[2];
+	size[0] = H; size[1] = W;
 	this->Tensor_2D = Matrix(H, W);
 }
 
@@ -16,7 +18,9 @@ Tensor::Tensor(int W, int H, int D)
 {
 	this->H = H; this->W = W;
 	this->Dim = 3;
-	this->Depth_1 = 4;
+	this->Depth_1 = D;
+	this->size = new int[3];
+	size[0] = H; size[1] = W; size[2] = D;
 	this->Tensor_3D = new Matrix[D];
 	for (int i = 0; i < D; i++)
 	{
@@ -30,6 +34,8 @@ Tensor::Tensor(int W, int H, int D1, int D2)
 	this->Dim = 4;
 	this->Depth_1 = D1;
 	this->Depth_2 = D2;
+	this->size = new int[4];
+	size[0] = H; size[1] = W; size[2] = D1; size[3] = D2;
 	this->Tensor_4D = new Matrix*[D1];
 	for (int i = 0; i < D1; i++)
 	{
@@ -50,25 +56,56 @@ Tensor::Tensor(int * A)
 
 	if (N == 2)
 	{
-
+		this->H = A[0]; this->W = A[1];
+		this->Dim = 2;
+		this->Depth_1 = 1;
+		size = A;
+		this->Tensor_2D = Matrix(A[0], A[1]);
 	}
 	else if (N == 3)
 	{
+		this->H = A[0]; this->W = A[1];
+		this->Dim = 3;
+		this->Depth_1 = 4;
+		size = A;
+		size[0] = A[0]; size[1] = A[1]; size[2] = A[2];
+		this->Tensor_3D = new Matrix[A[2]];
+		for (int i = 0; i < A[2]; i++)
+		{
+			this->Tensor_3D[i] = Matrix(A[0], A[1]);
+		}
 	}
 	else if (N == 4)
 	{
+		this->H = A[0]; this->W = A[1];
+		this->Dim = 4;
+		this->Depth_1 = A[2];
+		this->Depth_2 = A[3];
+		size = A;
+		this->Tensor_4D = new Matrix*[A[2]];
+		for (int i = 0; i < A[2]; i++)
+		{
+			this->Tensor_4D[i] = new Matrix[A[3]];
+		}
+		for (int i = 0; i < A[2]; i++)
+		{
+			for (int j = 0; j < A[3]; j++)
+			{
+				this->Tensor_4D[i][j] = Matrix(H, W);
+			}
+		}
 	}
 	else cout << "Size Error" << endl;
 
 }
 
-Tensor &Tensor::operator=(Matrix & op1)
+Tensor &Tensor::operator=(Matrix op1)
 {
 	this->Tensor_2D = op1;
 	return *this;
 }
 
-Tensor &Tensor::operator=(Tensor & op1)
+Tensor &Tensor::operator=(Tensor op1)
 {
 	*this = op1;
 	return *this;
