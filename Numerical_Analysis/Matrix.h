@@ -8,6 +8,8 @@ using namespace std;
 
 class Matrix
 {
+private:
+	Matrix expHelper(const Matrix&, int);
 public:
     int row, col;
     double **MAT;
@@ -18,16 +20,20 @@ public:
 	~Matrix();
 
 	// 锐家 青纺 贸府 何盒
+	//~~
 
+	// ~~
 
-    Matrix operator+(Matrix &op1);
-    Matrix operator-(Matrix &op1);
-    Matrix operator*(Matrix &op1);
-    Matrix operator*(int Constant);
-	Matrix operator^(int N);
-	Matrix operator->*(Matrix &op1);
-
-	Matrix Trans();
+	Matrix& operator=(const Matrix&);
+	Matrix& operator+=(const Matrix&);
+	Matrix& operator-=(const Matrix&);
+	Matrix& operator*=(const Matrix&);
+	Matrix& operator*=(double);
+	Matrix& operator/=(double);
+	Matrix  operator^(int);
+    
+	Matrix& operator=(double **MAT_);
+    
 	double *PTR_ROW(int index);
 	double *PTR_COL(int index);
 	double EigenValue();
@@ -35,6 +41,13 @@ public:
     void Identity();
     void show();
 };
+
+Matrix Trans(Matrix A);
+Matrix operator+(const Matrix &op1, const Matrix &op2);
+Matrix operator-(const Matrix &op1, const Matrix&op2);
+Matrix operator*(const Matrix &op1, const Matrix&op2);
+Matrix operator*(const Matrix&op1, int Constant);
+Matrix operator->*(const Matrix &op1, const Matrix&op2);
 
 Matrix::Matrix()
 {
@@ -48,174 +61,72 @@ Matrix::Matrix(int R, int C)
     this->MAT = new double* [R];
     for (int i = 0; i < R; i++)
     {
-        this->MAT[i] = new double [C];
+        this->MAT[i] = new double [C]();
     }
 }
 
 Matrix::Matrix(double **MAT_)
 {
-    if (sizeof(MAT_)/sizeof(double) == 0)
+    if (_msize(MAT_)/sizeof(double) == 0)
     {
         this->MAT = MAT_;
     }
     else
     {
-        this->MAT = MAT_;
-        this->row = sizeof(this->MAT)/sizeof(this->MAT[0]);
-        this->col = sizeof(this->MAT[0])/sizeof(double);
+        this->row = _msize(MAT_)/sizeof(double*);
+        this->col = _msize(MAT_[0])/sizeof(double);
+		this->MAT = new double*[this->row];
+		for (int i = 0; i < this->row; i++)
+		{
+			this->MAT[i] = new double[this->col]();
+			for (int j = 0; j < this->col; j++)
+			{
+				this->MAT[i][j] = MAT_[i][j];
+			}
+		}
     }
     
 }
 
-inline Matrix::~Matrix()
+Matrix::~Matrix()
 {
-	for (int i = 0; i < this->row; i++)
+	if (this->MAT != NULL)
 	{
-		delete [] this->MAT[i];
-	}
-	delete [] this->MAT;
-}
-
-Matrix Matrix::operator+(Matrix &op1)
-{
-    try
-    {
-        if (this->row != op1.row || this->col != op1.col)
-        {
-            int e = 0;
-            throw e;
-        }
-
-        Matrix RES(this->row, this->col);
-
-        for (int i = 0; i <= this->row; i++)
-        {
-            for (int j = 0; j <= this->col; j++)
-            {
-                RES.MAT[i][j] = this->MAT[i][j] + op1.MAT[i][j];
-            }
-        }
-
-        return RES;
-    }
-    catch (const int e)
-    {
-        cout << "Error: The shape of matrix doen't match!" << endl;
-    }
-}
-
-Matrix Matrix::operator-(Matrix &op1)
-{
-    try
-    {
-        if (this->row != op1.row || this->col != op1.col)
-        {
-            int e = 0;
-            throw e;
-        }
-
-        Matrix RES(this->row, this->col);
-
-        for (int i = 0; i <= this->row; i++)
-        {
-            for (int j = 0; j <= this->col; j++)
-            {
-                RES.MAT[i][j] = this->MAT[i][j] - op1.MAT[i][j];
-            }
-        }
-
-        return RES;
-    }
-    catch (const int e)
-    {
-        cout << "Error: The shape of matrix doen't match!" << endl;
-    }
-}
-
-Matrix Matrix::operator*(Matrix &op1)
-{
-    try
-    {
-        if (this->col != op1.row)
-        {
-            int e = 0;
-            throw e;
-        }
-
-        Matrix RES(this->row, op1.col);
-
-        for (int i = 0; i < this->row; i++)
-        {
-            for (int j = 0; j < op1.col; j++)
-            {
-                for (int k = 0; k < this->col; k++)
-                {
-                    RES.MAT[i][j] += this->MAT[i][k] * op1.MAT[k][j];
-                }
-            }
-        }
-
-        return RES;
-    }
-    catch (const std::exception &e)
-    {
-        cout << "Error: The shape of matrix doen't match!" << endl;
-    }
-}
-
-Matrix Matrix::operator*(int Constant)
-{
-
-    Matrix RES(this->row, this->col);
-
-    for (int i = 0; i < this->row; i++)
-    {
-        for (int j = 0; j < this->col; j++)
-        {
-            RES.MAT[i][j] = Constant * this->MAT[i][j];
-        }
-    }
-
-    return RES;
-}
-
-inline Matrix Matrix::operator^(int N)
-{
-	if (this->row != this->col)
-	{
-		cout << "Error: Shape Fault!" << endl;
-	}
-	else
-	{
-		Matrix RES(this->row, this->row);
-
-		RES = *this;
-
-		for (int i = 1; i <= N; i++)
-		{
-			RES = RES * (*this);
-		}
-
-		return RES;
-	}
-	return Matrix();
-}
-
-inline Matrix Matrix::operator->*(Matrix & op1)
-{
-	if (this->row != op1.row || this->col != op1.col)
-	{
-		cout << "Error: Shape Fault!" << endl;
-	}
-	else
-	{
-		Matrix res(this->row, this->col);
-
 		for (int i = 0; i < this->row; i++)
 		{
-			for (int j = 0; j < this->col; j++)
+			delete[] this->MAT[i];
+		}
+		delete[] this->MAT;
+
+		this->row = 0;
+		this->col = 0;
+	}
+}
+
+Matrix &Matrix::operator=(double **MAT_)
+{
+	this->row = _msize(MAT_) / sizeof(double*);
+	this->col = _msize(MAT_[0]) / sizeof(double);
+	this->MAT = MAT_;
+	return *this;
+}
+
+
+Matrix operator->*(const Matrix &op1, const Matrix &op2)
+{
+	if (op2.row != op1.row || op2.col != op1.col)
+	{
+		cout << "Error: Shape Fault!" << endl;
+	}
+	else
+	{
+		Matrix res(op2.row, op2.col);
+
+		for (int i = 0; i < op1.row; i++)
+		{
+			for (int j = 0; j < op1.col; j++)
 			{
-				res.MAT[i][j] = this->MAT[i][j] * op1.MAT[i][j];
+				res.MAT[i][j] = op2.MAT[i][j] * op1.MAT[i][j];
 			}
 		}
 		return res;
@@ -223,15 +134,15 @@ inline Matrix Matrix::operator->*(Matrix & op1)
 	return Matrix();
 }
 
-inline Matrix Matrix::Trans()
+Matrix Trans(Matrix A)
 {
-	Matrix res(this->col, this->row);
+	Matrix res(A.col, A.row);
 
-	for (int i = 0; i < this->col; i++)
+	for (int i = 0; i < A.col; i++)
 	{
-		for (int j = 0; j < this->row; j++)
+		for (int j = 0; j < A.row; j++)
 		{
-			res.MAT[i][j] = this->MAT[j][i];
+			res.MAT[i][j] = A.MAT[j][i];
 		}
 	}
 
@@ -441,4 +352,147 @@ double argmax_1d(double *A, int s, int e)
 		if (max < A[i])max = i;
 	}
 	return max;
+}
+
+Matrix& Matrix::operator+=(const Matrix& m)
+{
+	for (int i = 0; i < this->row; ++i) {
+		for (int j = 0; j < this->col; ++j) {
+			this->MAT[i][j] += m.MAT[i][j];
+		}
+	}
+	return *this;
+}
+
+Matrix& Matrix::operator-=(const Matrix& m)
+{
+	for (int i = 0; i < this->row; ++i) {
+		for (int j = 0; j < this->col; ++j) {
+			this->MAT[i][j] -= m.MAT[i][j];
+		}
+	}
+	return *this;
+}
+
+Matrix& Matrix::operator*=(const Matrix& m)
+{
+	Matrix temp(this->row, m.col);
+	for (int i = 0; i < temp.row; ++i) {
+		for (int j = 0; j < temp.col; ++j) {
+			for (int k = 0; k < this->col; ++k) {
+				temp.MAT[i][j] += (this->MAT[i][k] * m.MAT[k][j]);
+			}
+		}
+	}
+	return (*this = temp);
+}
+
+Matrix& Matrix::operator*=(double num)
+{
+	for (int i = 0; i < this->row; ++i) {
+		for (int j = 0; j < this->col; ++j) {
+			this->MAT[i][j] *= num;
+		}
+	}
+	return *this;
+}
+
+Matrix& Matrix::operator/=(double num)
+{
+	for (int i = 0; i < this->row; ++i) {
+		for (int j = 0; j < this->col; ++j) {
+			this->MAT[i][j] /= num;
+		}
+	}
+	return *this;
+}
+
+Matrix Matrix::operator^(int num)
+{
+	Matrix temp(*this);
+	return expHelper(temp, num);
+}
+
+Matrix Matrix::expHelper(const Matrix& m, int num)
+{
+	if (num == 0) {
+		Matrix A(m.row, m.row);
+		A.Identity();
+		return A;
+	}
+	else if (num == 1) {
+		return m;
+	}
+	else if (num % 2 == 0) {  // num is even
+		return expHelper(m * m, num / 2);
+	}
+	else {                    // num is odd
+		return m * expHelper(m * m, (num - 1) / 2);
+	}
+}
+
+Matrix& Matrix::operator=(const Matrix& m)
+{
+	if (this == &m) {
+		return *this;
+	}
+
+	if (this->row != m.row || this->col != m.col) 
+	{
+		for (int i = 0; i < this->row; ++i) {
+			delete[] this->MAT[i];
+		}
+		delete[] this->MAT;
+
+		this->row = m.row;
+		this->col = m.col;
+		
+		this->MAT = new double*[this->row];
+		for (int i = 0; i < this->row; i++)
+		{
+			this->MAT[i] = new double[this->col];
+		}
+	}
+
+	for (int i = 0; i < this->row; ++i) {
+		for (int j = 0; j < this->col; ++j) {
+			this->MAT[i][j] = m.MAT[i][j];
+		}
+	}
+	return *this;
+}
+
+Matrix operator+(const Matrix& m1, const Matrix& m2)
+{
+	Matrix temp(m1);
+	return (temp += m2);
+}
+
+Matrix operator-(const Matrix& m1, const Matrix& m2)
+{
+	Matrix temp(m1);
+	return (temp -= m2);
+}
+
+Matrix operator*(const Matrix& m1, const Matrix& m2)
+{
+	Matrix temp(m1);
+	return (temp *= m2);
+}
+
+Matrix operator*(const Matrix& m, double num)
+{
+	Matrix temp(m);
+	return (temp *= num);
+}
+
+Matrix operator*(double num, const Matrix& m)
+{
+	return (m * num);
+}
+
+Matrix operator/(const Matrix& m, double num)
+{
+	Matrix temp(m);
+	return (temp /= num);
 }

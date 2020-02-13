@@ -52,7 +52,7 @@ Tensor::Tensor(int W, int H, int D1, int D2)
 
 Tensor::Tensor(int * A)
 {
-	int N = sizeof(A) / sizeof(int);
+	int N = _msize(A) / sizeof(int);
 
 	if (N == 2)
 	{
