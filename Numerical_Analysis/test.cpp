@@ -19,7 +19,7 @@ int main()
 		}
 	}
 
-	C = A + A; // 메모리 에러.
+	C = A * B; 
 	
 	for (int i = 0; i < 5; i++)
 	{

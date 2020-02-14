@@ -17,9 +17,10 @@ public:
 	Matrix();
     Matrix(int R, int C);
     Matrix(double **MAT_);
+	Matrix(const Matrix& MAT_);
 	~Matrix();
 
-	// 锐家 青纺 贸府 何盒
+	// Part of dealing with Sparse Matrix 
 	//~~
 
 	// ~~
@@ -86,6 +87,26 @@ Matrix::Matrix(double **MAT_)
 		}
     }
     
+}
+
+Matrix::Matrix(const Matrix & MAT_)
+{
+	this->row = MAT_.row;
+	this->col = MAT_.col;
+	this->MAT = new double*[MAT_.row];
+	for (int i = 0; i < this->row; i++)
+	{
+		this->MAT[i] = new double[MAT_.col];
+	}
+
+	for (int i = 0; i < this->row; i++)
+	{
+		for (int j = 0; j < this->col; j++)
+		{
+			this->MAT[i][j] = MAT_.MAT[i][j];
+		}
+	}
+
 }
 
 Matrix::~Matrix()
@@ -478,6 +499,12 @@ Matrix operator*(const Matrix& m1, const Matrix& m2)
 {
 	Matrix temp(m1);
 	return (temp *= m2);
+}
+
+Matrix operator*(const Matrix & op1, int Constant)
+{
+	Matrix tmp(op1);
+	return (tmp *= Constant);
 }
 
 Matrix operator*(const Matrix& m, double num)
