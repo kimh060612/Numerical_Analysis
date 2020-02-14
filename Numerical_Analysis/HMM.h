@@ -18,7 +18,7 @@ struct Theta
 int *Create_Observation(Theta T);
 double Evaluate(Matrix STP, Matrix OP, double * ISP, int *Observation);
 int * Viterbi(Matrix STP, Matrix OP, double *ISP, int *Observation);
-Theta Learning_HMM(int *Observation, int num_state, int learning_epoch, int Threshold);
+Theta Learning_HMM(int *Observation, int N, int M, int learning_epoch, int Threshold);
 Theta Initialize_Theta(int T, int N);
 double * Random_Probability_Vector_Generator(int n);
 Matrix Calc_Alpha(Theta Model, int T, int N, int *Observation);
@@ -71,7 +71,7 @@ int *Viterbi(Matrix STP, Matrix OP, double *ISP, int *Observation)
 		for (int i = 0; i < N; i++)
 		{
 			int max = -987654321, k;
-			for (int j = 0; i < N; i++)
+			for (int j = 0; j < N; j++)
 			{
 				int Val = Decoding_DP.MAT[t - 1][j] * STP.MAT[j][i];
 				if (Val > max)k = j;
@@ -84,9 +84,9 @@ int *Viterbi(Matrix STP, Matrix OP, double *ISP, int *Observation)
 
 	int Q_hat[INF];
 
-	Q_hat[T] = argmax_1d(Decoding_DP.MAT[T], 1, N);
+	Q_hat[T - 1] = argmax_1d(Decoding_DP.PTR_ROW(T - 1), 0, N);
 
-	for (int t = T - 1; t > 0; t--)
+	for (int t = T - 2; t >= 0; t--)
 	{
 		Q_hat[t] = Decoding_DP.MAT[t + 1][Q_hat[t + 1]];
 	}
@@ -183,7 +183,7 @@ Matrix Calc_Alpha(Theta Model, int T, int N, int *Observation)
 	{
 		for (int i = 0; i < N; i++)
 		{
-			int tmp = 0;
+			double tmp = 0;
 			for (int j = 0; j < N; j++)
 			{
 				tmp += Alpha.MAT[t - 1][j] * Model.STP.MAT[j][i];
@@ -210,7 +210,7 @@ Matrix Calc_Beta(Theta Model, int T, int N, int *Observation)
 	{
 		for (int i = 0; i < N; i++)
 		{
-			int sum = 0;
+			double sum = 0;
 			for (int j = 0; j < N; j++)
 			{
 				sum += Model.STP.MAT[j][i] * Model.OP.MAT[j][Observation[t]] * Beta.MAT[t + 1][j];
@@ -225,7 +225,7 @@ Matrix Calc_Beta(Theta Model, int T, int N, int *Observation)
 
 double element_product_Sum(double *A, double *B, int N)
 {
-	int sum = 0;
+	double sum = 0;
 
 	for (int i = 0; i < N; i++)
 	{

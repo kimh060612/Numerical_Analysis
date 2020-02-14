@@ -50,6 +50,37 @@ Tensor::Tensor(int W, int H, int D1, int D2)
 	}
 }
 
+Tensor::Tensor(const Tensor & T)
+{
+	this->Dim = sizeof(T.size)/sizeof(int);
+	this->size = new int[this->Dim];
+	for (int i = 0; i < this->Dim; i++)
+	{
+		this->size[i] = T.size[i];
+	}
+	if (Dim == 2) this->Tensor_2D = Matrix(size[0], size[1]);
+	else if (Dim == 3)
+	{
+		this->Tensor_3D = new Matrix[size[2]];
+		for (int i = 0; i < size[2]; i++)
+		{
+			this->Tensor_3D[i] = Matrix(size[0], size[1]);
+		}
+	}
+	else
+	{
+		this->Tensor_4D = new Matrix*[size[2]];
+		for (int i = 0; i < size[2]; i++)
+		{
+			this->Tensor_4D[i] = new Matrix[size[3]];
+			for (int j = 0; j < size[3]; j++)
+			{
+				this->Tensor_4D[i][j] = Matrix(size[0], size[1]);
+			}
+		}
+	}
+}
+
 Tensor::Tensor(int * A)
 {
 	int N = _msize(A) / sizeof(int);
@@ -99,6 +130,21 @@ Tensor::Tensor(int * A)
 
 }
 
+inline double & Tensor::operator()(int y, int x, int d, int num)
+{
+	return this->Tensor_4D[num][d](y,x);
+}
+
+inline double & Tensor::operator()(int y, int x, int d)
+{
+	return this->Tensor_3D[d](y, x);
+}
+
+inline double & Tensor::operator()(int y, int x)
+{
+	return this->Tensor_2D(y, x);
+}
+
 Tensor &Tensor::operator=(Matrix op1)
 {
 	this->Tensor_2D = op1;
@@ -113,6 +159,7 @@ Tensor &Tensor::operator=(Tensor op1)
 
 Tensor::~Tensor()
 {
+
 	if (this->Dim == 3)delete[] this->Tensor_3D;
 
 	if (this->Dim == 4)

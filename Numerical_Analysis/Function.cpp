@@ -13,7 +13,7 @@ Tensor Feed_Function(Parameter U, Act_Func F)
 		{
 			for (int j = 0; j < U.Data.size[1]; j++)
 			{
-				res.MAT[i][j] = F.Forward_Func(U.Data.Tensor_2D.MAT[i][j]);
+				res(i,j) = F.Forward_Func(U.Data.Tensor_2D(i,j));
 			}
 		}
 		RES.Tensor_2D = res;
@@ -28,7 +28,7 @@ Tensor Feed_Function(Parameter U, Act_Func F)
 			{
 				for (int j = 0; j < U.Data.size[1]; j++)
 				{
-					res.Tensor_3D[d].MAT[i][j] = F.Forward_Func(U.Data.Tensor_3D[d].MAT[i][j]);
+					res(i,j,d) = F.Forward_Func(U.Data(i,j,d));
 				}
 			}
 		}
@@ -46,7 +46,7 @@ Tensor Feed_Function(Parameter U, Act_Func F)
 				{
 					for (int j = 0; j < U.Data.size[1]; j++)
 					{
-						res.Tensor_4D[d1][d2].MAT[i][j] = F.Forward_Func(U.Data.Tensor_4D[d1][d2].MAT[i][j]);
+						res(i,j,d1,d2) = F.Forward_Func(U.Data(i,j,d1,d2));
 					}
 				}
 			}

@@ -13,15 +13,23 @@ public:
 	Matrix **Tensor_4D;
 	int *size;
 
+	//Tensor size array = [Height, Width, Depth1, number of 3D Tensor]
+	// if Tensor Dim==2 -> Matrix
+	// if Tensor Dim==3 -> size array num 3
+	// if Tensor Dim==4 -> size array num 4
+
 	Tensor();
 	Tensor(int W, int H);
 	Tensor(int W, int H, int D);
 	Tensor(int W, int H, int D1, int D2); // Maybe Input only
+	Tensor(const Tensor& T);
 	Tensor(int *A);
+
+	inline double& operator()(int y, int x, int d, int num);
+	inline double& operator()(int y, int x, int d);
+	inline double& operator()(int y, int x);
 
 	Tensor &operator=(Matrix op1);
 	Tensor &operator=(Tensor op1);
-
 	~Tensor();
-
 };
