@@ -5,11 +5,10 @@
 class Act_Func
 {
 public:
-
 	// Feed forward Activation Func.
 	double Sigmoid(double x)
 	{
-		return 1 / (1 + exp(-x));
+		return 1. / (1. + exp(-x));
 	}
 	double Tanh(double x)
 	{
@@ -42,20 +41,20 @@ public:
 	double De_Sigmoid(double x)
 	{
 		double tmp = Sigmoid(x);
-		return tmp * (1 - tmp);
+		return tmp * (1. - tmp);
 	}
 	double De_tanh(double x)
 	{
 		double tmp = Tanh(x);
-		return 1 - tmp * tmp;
+		return 1. - tmp * tmp;
 	}
 	double De_ReLU(double x)
 	{
-		return x > 0 ? 1 : 0;
+		return x > 0 ? 1. : 0;
 	}
 	double De_Identity(double x)
 	{
-		return 1;
+		return 1.;
 	}
 	
 	string name;
@@ -114,7 +113,8 @@ public:
 	// Weight의 Dimension == 2, Bias 의 Dim은 1, U의 N*1
 	FunctionFullyConnectWeight(Parameter *Weight, Parameter *bias);
 	void forward();
-	void BackProp(Function &Pre_func);
+	void BackProp(Function &Pre_func, FunctionFullyConnectWeight & next_layer);
+	// Gradient Matrix를 구하는 부분 Update는 Optimizer에서 진행함. Model이 이러한 Class들을 총 병합해서 관리함.
 };
 
 class FunctionIdentity : public Function

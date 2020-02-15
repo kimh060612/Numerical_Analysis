@@ -15,6 +15,7 @@ public:
 	// 1: has Data also Gradient
 	// 2,3 : has Data no Gradient
 
+	Tensor Delta;
 	Tensor Gradient;
 	Tensor Data;
 	Tensor Weight;

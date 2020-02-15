@@ -23,3 +23,22 @@ Graph::~Graph()
 	if (this->Block_type == 0)delete[] this->Layer_block;
 
 }
+
+void Graph::Feed_forwar()
+{
+	if (this->Block_type == 0)
+	{
+		// U^(l) has Delta
+		this->Layer_block[0].forward(); // Weight Sum, input: Z^(l-1) output: U^(l)
+		this->Layer_block[1].forward(); // Activation input: U^(l), output: Z^(l)
+	}
+}
+
+void Graph::Back_propagation()
+{
+	if (this->Block_type == 0)
+	{
+		
+	}
+
+}

@@ -33,8 +33,10 @@ public:
 
 	double *PTR_ROW(int index);
 	double *PTR_COL(int index);
+	//------TODO--------
 	double EigenValue();
 	Matrix EigenVector();
+	//----------------------
 	void Identity();
 	void show();
 };

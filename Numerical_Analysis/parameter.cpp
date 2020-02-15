@@ -8,10 +8,9 @@ Parameter::Parameter()
 Parameter::Parameter(Parameter & a)
 {
 	this->Data = a.Data;
-	this->Gradient = a.Gradient;
+	this->Delta = a.Delta;
 	this->Is_Grad = a.Is_Grad;
 	this->Is_last_Grad = a.Is_last_Grad;
-
 }
 
 Parameter::Parameter(int * A, bool isGrad)
@@ -19,7 +18,7 @@ Parameter::Parameter(int * A, bool isGrad)
 	Tensor Mat_D(A);
 	Tensor Mat_G(A);
 	this->Data = Mat_D;
-	if (isGrad)this->Gradient = Mat_G;
+	if (isGrad)this->Delta = Mat_G;
 	this->Is_Grad = isGrad;
 
 }
@@ -27,8 +26,9 @@ Parameter::Parameter(int * A, bool isGrad)
 Parameter::Parameter(Matrix & Mat, bool isGrad)
 {
 	Matrix Mat_G(Mat.row, Mat.col);
-	this->Data = Mat;
-	if (isGrad)this->Gradient = Mat_G;
+	Tensor tmp(Mat);
+	this->Data = tmp;
+	if (isGrad) { this->Delta = Mat_G; }
 	this->Is_Grad = isGrad;
 }
 
@@ -36,7 +36,7 @@ Parameter::Parameter(Tensor & Mat, bool isGrad)
 {
 	Tensor Mat_G(Mat.size);
 	this->Data = Mat;
-	if (isGrad)this->Gradient = Mat_G;
+	if (isGrad)this->Delta = Mat_G;
 	this->Is_Grad = isGrad;
 }
 

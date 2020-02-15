@@ -23,12 +23,13 @@ public:
 	Model();
 	~Model();
 	
-	void Put_FCNN(string N, Parameter &Input, Parameter &output, int *Weight_Size, string act_name); // Weight_size dim == 2
+	void Put_FCNN(string N, Parameter &Input, Parameter &output, double *Weight_Size, string act_name); // Weight_size dim == 2
+	
 
+	void Compile();
+	void Fit(double learning_rate);
 
 };
-
-
 
 #endif // !__MODEL_H__
 #pragma once

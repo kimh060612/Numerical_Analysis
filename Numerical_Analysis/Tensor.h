@@ -22,6 +22,7 @@ public:
 	Tensor(int W, int H);
 	Tensor(int W, int H, int D);
 	Tensor(int W, int H, int D1, int D2); // Maybe Input only
+	Tensor(const Matrix& M);
 	Tensor(const Tensor& T);
 	Tensor(int *A);
 
@@ -29,8 +30,8 @@ public:
 	inline double& operator()(int y, int x, int d) { return this->Tensor_3D[d](y, x); }
 	inline double& operator()(int y, int x) { return this->Tensor_2D(y, x); }
 
-	Tensor &operator=(Matrix op1);
-	Tensor &operator=(Tensor op1);
+	Tensor &operator=(const Matrix &op1);
+	Tensor &operator=(const Tensor &op1);
 
 	~Tensor();
 };

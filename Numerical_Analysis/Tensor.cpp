@@ -10,7 +10,7 @@ Tensor::Tensor(int W, int H)
 	this->Dim = 2;
 	this->Depth_1 = 1;
 	this->size = new int[2];
-	size[0] = H; size[1] = W;
+	this->size[0] = H; this->size[1] = W;
 	this->Tensor_2D = Matrix(H, W);
 }
 
@@ -20,7 +20,7 @@ Tensor::Tensor(int W, int H, int D)
 	this->Dim = 3;
 	this->Depth_1 = D;
 	this->size = new int[3];
-	size[0] = H; size[1] = W; size[2] = D;
+	this->size[0] = H; this->size[1] = W; this->size[2] = D;
 	this->Tensor_3D = new Matrix[D];
 	for (int i = 0; i < D; i++)
 	{
@@ -35,7 +35,7 @@ Tensor::Tensor(int W, int H, int D1, int D2)
 	this->Depth_1 = D1;
 	this->Depth_2 = D2;
 	this->size = new int[4];
-	size[0] = H; size[1] = W; size[2] = D1; size[3] = D2;
+	this->size[0] = H; this->size[1] = W; this->size[2] = D1; this->size[3] = D2;
 	this->Tensor_4D = new Matrix*[D1];
 	for (int i = 0; i < D1; i++)
 	{
@@ -48,6 +48,13 @@ Tensor::Tensor(int W, int H, int D1, int D2)
 			this->Tensor_4D[i][j] = Matrix(H, W);
 		}
 	}
+}
+
+Tensor::Tensor(const Matrix & M)
+{
+	this->Dim = 2;
+	this->size = new int[2]; this->size[0] = M.row; this->size[1] = M.col;
+	this->Tensor_2D = M;
 }
 
 Tensor::Tensor(const Tensor & T)
@@ -134,15 +141,67 @@ Tensor::Tensor(int * A)
 
 }
 
-Tensor &Tensor::operator=(Matrix op1)
+Tensor &Tensor::operator=(const Matrix &op1)
 {
-	this->Tensor_2D = op1;
+	if (this->Dim != 2)
+	{
+		if (this->Dim == 3) { delete[] this->Tensor_3D; delete[] this->size; }
+		if (this->Dim == 4)
+		{
+			for (int i = 0; i < this->size[2]; i++)delete[] this->Tensor_4D[i];
+			delete[] this->Tensor_4D;
+			delete[] this->size;
+		}
+	}
+	Tensor tmp(op1);
+	this->Dim = 2;
+	this->size = new int[2]; this->size[0] = op1.row; this->size[1] = op1.col;
+	this->Tensor_2D = tmp;
 	return *this;
 }
 
-Tensor &Tensor::operator=(Tensor op1)
+Tensor &Tensor::operator=(const Tensor &op1)
 {
-	*this = op1;
+	if (this->Dim != op1.Dim)
+	{
+		if (this->Dim == 3) { delete[] this->Tensor_3D; delete[] this->size; }
+		if (this->Dim == 4)
+		{
+			for (int i = 0; i < this->size[2]; i++)delete[] this->Tensor_4D[i];
+			delete[] this->Tensor_4D;
+			delete[] this->size;
+		}
+	}
+
+	if (op1.Dim == 3)
+	{
+		this->Dim = 3;
+		this->Tensor_3D = new Matrix[op1.size[2]];
+		this->size = new int[3]; this->size[0] = op1.size[0]; this->size[1] = op1.size[1]; this->size[2] = op1.size[2];
+
+		for (int i = 0; i < op1.size[2]; i++)
+		{
+			this->Tensor_3D[i] = Matrix(this->size[0], this->size[1]);
+			this->Tensor_3D[i] = op1.Tensor_3D[i];
+		}
+	}
+
+	if (op1.Dim == 4)
+	{
+		this->Dim = 4;
+		this->size = new int[3]; this->size[0] = op1.size[0]; this->size[1] = op1.size[1]; this->size[2] = op1.size[2]; this->size[3] = op1.size[3];
+		this->Tensor_4D = new Matrix*[op1.size[3]];
+		for (int i = 0; i < op1.size[3]; i++)
+		{
+			this->Tensor_4D[i] = new Matrix[op1.size[2]];
+			for (int j = 0; j < op1.size[2]; j++)
+			{
+				this->Tensor_4D[i][j] = Matrix(this->size[0], this->size[1]);
+				this->Tensor_4D[i][j] = op1.Tensor_4D[i][j];
+			}
+		}
+	}
+
 	return *this;
 }
 
