@@ -38,9 +38,9 @@ Tensor Feed_Function(Parameter U, Act_Func F)
 	else if (N == 4) // Delete This if-state when needed  
 	{
 		Tensor res(U.Data.size);
-		for (int d1 = 0; d1 < U.Data.size[2]; d1++)
+		for (int d2 = 0; d2 < U.Data.size[3]; d2++)
 		{
-			for (int d2 = 0; d2 < U.Data.size[3]; d2++)
+			for (int d1 = 0; d1 < U.Data.size[2]; d1++)
 			{
 				for (int i = 0; i < U.Data.size[0]; i++)
 				{

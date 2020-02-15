@@ -67,7 +67,7 @@ Tensor::Tensor(const Tensor & T)
 			this->Tensor_3D[i] = Matrix(size[0], size[1]);
 		}
 	}
-	else
+	else if (Dim == 4)
 	{
 		this->Tensor_4D = new Matrix*[size[2]];
 		for (int i = 0; i < size[2]; i++)
@@ -78,6 +78,10 @@ Tensor::Tensor(const Tensor & T)
 				this->Tensor_4D[i][j] = Matrix(size[0], size[1]);
 			}
 		}
+	}
+	else
+	{
+		cout << "Dimension Error!" << endl;
 	}
 }
 
@@ -130,21 +134,6 @@ Tensor::Tensor(int * A)
 
 }
 
-inline double & Tensor::operator()(int y, int x, int d, int num)
-{
-	return this->Tensor_4D[num][d](y,x);
-}
-
-inline double & Tensor::operator()(int y, int x, int d)
-{
-	return this->Tensor_3D[d](y, x);
-}
-
-inline double & Tensor::operator()(int y, int x)
-{
-	return this->Tensor_2D(y, x);
-}
-
 Tensor &Tensor::operator=(Matrix op1)
 {
 	this->Tensor_2D = op1;
@@ -171,4 +160,14 @@ Tensor::~Tensor()
 		delete[] this->Tensor_4D;
 	}
 
+}
+
+Tensor operator+(Tensor & op1, Tensor & op2)
+{
+	return Tensor();
+}
+
+Tensor operator-(Tensor & op1, Tensor & op2)
+{
+	return Tensor();
 }

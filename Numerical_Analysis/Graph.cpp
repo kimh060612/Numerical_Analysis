@@ -12,11 +12,14 @@ Graph::Graph(int type_Block)
 
 	if (type_Block == 0)
 	{
-
+		this->Layer_block = new Function[2];
+		this->Block_type = type_Block;
 	}
 
 }
 
 Graph::~Graph()
 {
+	if (this->Block_type == 0)delete[] this->Layer_block;
+
 }
