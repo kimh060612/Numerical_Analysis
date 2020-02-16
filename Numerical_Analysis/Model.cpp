@@ -41,7 +41,7 @@ Model::~Model()
 }
 
 void Model::Put_FCNN(string N, Parameter & Input, Parameter & output, int * Weight_Size, string act_name)
-{
+{// Compile 빼고 여기서 그냥 확인시켜?
 	this->Layer_num++;
 	int bias_size[2]; bias_size[0] = Weight_Size[0]; bias_size[1] = 1;
 	Tensor Weight_(Weight_Size);
@@ -64,7 +64,10 @@ void Model::Put_FCNN(string N, Parameter & Input, Parameter & output, int * Weig
 
 void Model::Feed_forward()
 {
-
+	for (auto g : this->graph)
+	{
+		g.second->Feed_forward();
+	}
 }
 
 void Model::Back_propagation()
@@ -73,12 +76,12 @@ void Model::Back_propagation()
 }
 
 void Model::Compile()
-{
+{// 아오 씨발 너무 스케일이 커져 버렸네
 
 }
 
 void Model::Fit(double learning_rate, int total_epoch)
-{
+{// 이눔이 training을 시키는데 야발 Optimizer를 넣어야 할 텐데
 
 }
 

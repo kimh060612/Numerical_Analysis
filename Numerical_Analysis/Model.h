@@ -19,6 +19,7 @@ public:
 		bias.Is_Grad = false;
 	}
 	void Parameter_Initialize(string init, bool another_bias_init);
+	// Gaussian Distribution, Xavier, Just Rand etc... 나중에 추가하기
 };
 
 class Model // Model Class가 Update 해야할 parameter들을 저장함. Weight와 bias를 저장하는 부분.
@@ -28,7 +29,7 @@ private:
 public:
 	map<string, Graph*> graph;
 	vector<UpdateParam> Update;
-	string Up_initial_Algo;
+	string Up_initial_Algo; // ?
 
 	Model();
 	Model(string initial);

@@ -1,5 +1,6 @@
 #include <iostream>
-#include "Function.h"
+//#include "Function.h"
+#include <ctime>
 
 using namespace std;
 
@@ -44,7 +45,7 @@ int main()
 	{
 		cout << i << endl;
 	}
-	*/
+	
 
 	Matrix A(5,1), B(1,6);
 	Matrix C;
@@ -67,6 +68,18 @@ int main()
 
 	C = A * B;
 	C.show();
+	*/
+
+	srand((unsigned int)time(NULL));
+	double avg_index = 0;
+
+	for (int i = 0; i < 500; i++)
+	{
+		avg_index += (double)((rand() % 6) + 1.);
+	}
+	avg_index /= 500.;
+
+	cout << avg_index << endl;
 
 	return 0;
 }
