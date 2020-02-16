@@ -103,7 +103,6 @@ public:
 	string name;
 
 	virtual void forward();
-	virtual void Backprop(Function &Pre_func);
 };
 
 class FunctionFullyConnectWeight : public Function

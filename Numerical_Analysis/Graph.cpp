@@ -1,20 +1,21 @@
 #include "Graph.h"
 
-Graph::Graph(int type_Block)
-{
-	// tpye 0: Fully Connected layer
-	// type 1: Convolution Layer
-	// type 2: Pooling layer
-	// type 3: BPTT RNN layer 1 hidden
-	// type 4: LSTM
-	// type 5: GRU
-	// and so on...
+// tpye 0: Fully Connected layer
+// type 1: Convolution Layer
+// type 2: Pooling layer
+// type 3: BPTT RNN layer 1 hidden
+// type 4: LSTM
+// type 5: GRU
+// and so on...
 
-	if (type_Block == 0)
-	{
-		this->Layer_block = new Function[2];
-		this->Block_type = type_Block;
-	}
+Graph::Graph(int type_Block, FunctionFullyConnectWeight &F1, Function &Act)
+{
+	if (type_Block != 0) cout << "Type Fail!" << endl;
+	this->Layer_block = new Function[2];
+	this->Block_type = type_Block;
+
+	this->Layer_block[0] = F1;
+	this->Layer_block[1] = Act;
 
 }
 
@@ -24,7 +25,7 @@ Graph::~Graph()
 
 }
 
-void Graph::Feed_forwar()
+void Graph::Feed_forward()
 {
 	if (this->Block_type == 0)
 	{

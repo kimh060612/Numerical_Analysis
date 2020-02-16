@@ -5,6 +5,7 @@ using namespace std;
 
 int main()
 {
+	/*
 	Matrix A(5,5);
 	Matrix B(5,5), C(3,3);
 
@@ -43,6 +44,29 @@ int main()
 	{
 		cout << i << endl;
 	}
+	*/
+
+	Matrix A(5,1), B(1,6);
+	Matrix C;
+
+	A(0, 0) = 1;
+	A(1, 0) = 2;
+	A(2, 0) = 3;
+	A(3, 0) = 4;
+	A(4, 0) = 5;
+	A.show();
+	cout << endl;
+	B(0, 0) = 1;
+	B(0, 1) = 2;
+	B(0, 2) = 3;
+	B(0, 3) = 4;
+	B(0, 4) = 5;
+	B(0, 5) = 6;
+	B.show();
+	cout << endl;
+
+	C = A * B;
+	C.show();
 
 	return 0;
 }

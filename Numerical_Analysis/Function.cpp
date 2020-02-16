@@ -13,7 +13,7 @@ Tensor Feed_Function(Parameter U, Act_Func F)
 		{
 			for (int j = 0; j < U.Data.size[1]; j++)
 			{
-				res(i,j) = F.Forward_Func(U.Data.Tensor_2D(i,j));
+				res(i, j) = F.Forward_Func(U.Data.Tensor_2D(i, j));
 			}
 		}
 		RES = res;
@@ -28,7 +28,7 @@ Tensor Feed_Function(Parameter U, Act_Func F)
 			{
 				for (int j = 0; j < U.Data.size[1]; j++)
 				{
-					res(i,j,d) = F.Forward_Func(U.Data(i,j,d));
+					res(i, j, d) = F.Forward_Func(U.Data(i, j, d));
 				}
 			}
 		}
@@ -46,7 +46,7 @@ Tensor Feed_Function(Parameter U, Act_Func F)
 				{
 					for (int j = 0; j < U.Data.size[1]; j++)
 					{
-						res(i,j,d1,d2) = F.Forward_Func(U.Data(i,j,d1,d2));
+						res(i, j, d1, d2) = F.Forward_Func(U.Data(i, j, d1, d2));
 					}
 				}
 			}
@@ -122,10 +122,6 @@ Function::Function(Parameter * U, Parameter * Z)
 }
 
 void Function::forward()
-{
-}
-
-void Function::Backprop(Function & Pre_func)
 {
 }
 
