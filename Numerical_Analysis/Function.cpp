@@ -220,12 +220,22 @@ void FunctionMeanSquareError::BackProp(Function & Pre_func)
 		if (this->target_output.Dim != 2 || this->target_output.size[0] != this->input->Data.size[0] || this->target_output.size[1] != this->input->Data.size[1]) cout << "Dimension Error" << endl;
 		Act_Func Last(this->act_);
 		Tensor DE_func = Backward_Function(*(this->input),Last);
-		this->input->Delta = (this->input->Data.Tensor_2D - this->target_output.Tensor_2D) ->* DE_func.Tensor_2D;
-
+		this->input->Delta.Tensor_2D = (this->input->Data.Tensor_2D - this->target_output.Tensor_2D) ->* DE_func.Tensor_2D;
+		this->input->Gradient = (this->input->Delta.Tensor_2D) * (Pre_func.output->Data.Tensor_2D);
 	}
 }
 
 double FunctionMeanSquareError::Get_Error()
 {
-	return 0.0;
+	double Error = 0.;
+	if (this->input->Data.Dim == 2)
+	{
+		int num = this->input->Data.size[0];
+		for (int i = 0; i < num; i++)
+		{
+			Error += (this->input->Data.Tensor_2D(i, 0) - this->target_output.Tensor_2D(i, 0))*(this->input->Data.Tensor_2D(i, 0) - this->target_output.Tensor_2D(i, 0));
+		}
+		Error /= 2.;
+	}
+	return Error;
 }
