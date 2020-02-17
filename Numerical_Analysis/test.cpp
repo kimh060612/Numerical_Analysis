@@ -1,6 +1,7 @@
 #include <iostream>
 //#include "Function.h"
 #include <ctime>
+#include <map>
 
 using namespace std;
 
@@ -68,7 +69,7 @@ int main()
 
 	C = A * B;
 	C.show();
-	*/
+	
 
 	srand((unsigned int)time(NULL));
 	double avg_index = 0;
@@ -80,6 +81,23 @@ int main()
 	avg_index /= 500.;
 
 	cout << avg_index << endl;
+	*/
+
+	map<int, int> T;
+	T[1] = 1;
+	T[2] = 2;
+	T[3] = 3;
+	T[4] = 4;
+	T[5] = 5;
+	T[6] = 6;
+	T[7] = 7;
+	T[8] = 8;
+
+	map<int, int>::reverse_iterator rit;
+	for (rit = T.rbegin(); rit != T.rend(); rit++)
+	{
+		cout << rit->first << " : " << rit->second << endl;
+	}
 
 	return 0;
 }

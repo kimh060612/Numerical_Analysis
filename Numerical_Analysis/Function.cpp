@@ -125,6 +125,10 @@ void Function::forward()
 {
 }
 
+void Function::Get_Delta_Error()
+{
+}
+
 FunctionIdentity::FunctionIdentity()
 {
 	this->name = "Identity";
@@ -202,10 +206,26 @@ void FunctionFullyConnectWeight::BackProp(Function & Pre_func, FunctionFullyConn
 	this->output->Gradient = (this->output->Delta.Tensor_2D) * (this->input->Data.Tensor_2D);
 }
 
-FunctionMeanSquareError::FunctionMeanSquareError(Function & Loss)
+FunctionMeanSquareError::FunctionMeanSquareError(Function & Pre_func, Tensor Target)
 {
+	this->input = Pre_func.output;
+	this->act_ = Pre_func.name;
+	this->target_output = Target;
 }
 
-void FunctionMeanSquareError::Get_Delta()
+void FunctionMeanSquareError::BackProp(Function & Pre_func)
 {
+	if (this->input->Data.Dim == 2)
+	{
+		if (this->target_output.Dim != 2 || this->target_output.size[0] != this->input->Data.size[0] || this->target_output.size[1] != this->input->Data.size[1]) cout << "Dimension Error" << endl;
+		Act_Func Last(this->act_);
+		Tensor DE_func = Backward_Function(*(this->input),Last);
+		this->input->Delta = (this->input->Data.Tensor_2D - this->target_output.Tensor_2D) ->* DE_func.Tensor_2D;
+
+	}
+}
+
+double FunctionMeanSquareError::Get_Error()
+{
+	return 0.0;
 }

@@ -64,15 +64,22 @@ void Model::Put_FCNN(string N, Parameter & Input, Parameter & output, int * Weig
 
 void Model::Feed_forward()
 {
-	for (auto g : this->graph)
+	for (auto &g : this->graph)
 	{
 		g.second->Feed_forward();
 	}
 }
 
 void Model::Back_propagation()
-{
-
+{// Last Layer에 대한 것을 생각하자. 
+	map<string, Graph*>::reverse_iterator rit;
+	bool Is_last = true;
+	for (rit = this->graph.rbegin(); rit != this->graph.rend(); rit++)
+	{
+		if (rit->second->Block_type == 0) { rit->second->Back_propagation(); }
+		if (Is_last)Is_last = false;
+	}
+	
 }
 
 void Model::Compile()

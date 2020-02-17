@@ -103,6 +103,8 @@ public:
 	string name;
 
 	virtual void forward();
+	//virtual void BackProp(Function &Pre_func, FunctionFullyConnectWeight & next_layer);
+	virtual void Get_Delta_Error();
 };
 
 class FunctionFullyConnectWeight : public Function
@@ -150,9 +152,12 @@ class FunctionMeanSquareError : public Function
 {
 public:
 	Function *Last_layer;
+	Tensor target_output;
+	string act_;
 	double Loss;
-	FunctionMeanSquareError(Function &Loss);
-	void Get_Delta();
+	FunctionMeanSquareError(Function &Pre_func, Tensor Target);
+	void BackProp(Function & Pre_func);// Pre_func은 이전 히든 레이어의 Activation function
+	double Get_Error();
 };
 
 
