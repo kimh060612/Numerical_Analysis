@@ -144,6 +144,16 @@ public:
 	void forward();
 };
 
+//Error Function
+
+class FunctionMeanSquareError : public Function
+{
+public:
+	Function *Last_layer;
+	double Loss;
+	FunctionMeanSquareError(Function &Loss);
+	void Get_Delta();
+};
 
 
 #endif // !__FUNC_H__

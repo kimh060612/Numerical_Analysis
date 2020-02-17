@@ -201,3 +201,11 @@ void FunctionFullyConnectWeight::BackProp(Function & Pre_func, FunctionFullyConn
 	this->B->Gradient = this->output->Delta;
 	this->output->Gradient = (this->output->Delta.Tensor_2D) * (this->input->Data.Tensor_2D);
 }
+
+FunctionMeanSquareError::FunctionMeanSquareError(Function & Loss)
+{
+}
+
+void FunctionMeanSquareError::Get_Delta()
+{
+}
