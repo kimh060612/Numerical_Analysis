@@ -1,7 +1,16 @@
 #ifndef __OPTIMIZER_H__
-#include "Model.h"
+#include "Graph.h"
 
 class Optimizer
+{
+public:
+	Function *Loss;
+	string Optimizer_tpye;
+	Optimizer();
+	~Optimizer();
+};
+
+class Normal_Gradient_Descent : public Optimizer // 1 Compute, 1 
 {
 
 };
